@@ -1,11 +1,11 @@
 import numpy as np
-from numba import jit
+import matplotlib
+matplotlib.use("Qt5Agg")
 import matplotlib.pyplot as plt
 
-def build_hamilton(qtrj):
+def build_hamilton(qtrj, dsp):
     diagEn = np.zeros(Nm + 1)
     diagEn[0] = omega
-    dsp = np.sqrt(2 * np.multiply(s, 1/pFreq))
     reorgE = np.multiply(0.5 * pFreq**2, (qtrj - dsp)**2)
     diagEn[1:] = eNPL + reorgE
     h = np.diag(diagEn)
@@ -65,6 +65,8 @@ sigmaP = np.zeros(Nm)
 shift = np.zeros(Nm)
 # Huang-Rhys factor
 s = np.full(Nm, 0.5)
+# calculate excited state displacements from s
+dsp = np.sqrt(2 * np.multiply(s, 1/pFreq))
 # NPL in their excited state. inES = 1 if the NPL is excited at time zero.
 for n in range(pFreq.size):
     sigmaQ[n] = np.sqrt(1 / (2 * pFreq[n] * np.tanh(pFreq / (Kb * T))))
